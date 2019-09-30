@@ -1,3 +1,5 @@
+<p align="center">Custom Sikoji</p>
+
 <p align="center">:rocket: <strong>CRUDBOOSTER<sup>v6</sup></strong>:new: will be available soon, stay tuned :revolving_hearts: :rocket:</p>
 <hr>
 
