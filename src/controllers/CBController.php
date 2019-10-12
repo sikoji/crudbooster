@@ -1130,6 +1130,7 @@ class CBController extends Controller
 
     public function postAddSave()
     {
+        
         $this->cbLoader();
         if (! CRUDBooster::isCreate() && $this->global_privilege == false) {
             CRUDBooster::insertLog(trans('crudbooster.log_try_add_save', [
@@ -1138,19 +1139,41 @@ class CBController extends Controller
             ]));
             CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
         }
-
+        
         $this->validation();
         $this->input_assignment();
-
+        
         if (Schema::hasColumn($this->table, 'created_at')) {
             $this->arr['created_at'] = date('Y-m-d H:i:s');
         }
-
+        
         $this->hook_before_add($this->arr);
-
+        
 //         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
-        $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
 
+        try { 
+            $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
+          } catch(\Illuminate\Database\QueryException $e){ 
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == 1062){
+                $res = redirect()->back()->with([
+                    'message' => "Data sudah pernah diinput. Periksa Kembali Tahun/Bulan/Jenis data anda.",
+                    'message_type' => 'warning',
+                ])->withInput();
+                \Session::driver()->save();
+                $res->send();
+                exit;
+            } else {
+                $res = redirect()->back()->with([
+                    'message' => $e->getMessage(),
+                    'message_type' => 'danger',
+                ])->withInput();
+                \Session::driver()->save();
+                $res->send();
+                exit;
+            }
+        }
+          
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];
@@ -1285,8 +1308,31 @@ class CBController extends Controller
         }
 
         $this->hook_before_edit($this->arr, $id);
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
 
+        try { 
+            DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
+        } catch(\Illuminate\Database\QueryException $e){ 
+            $errorCode = $e->errorInfo[1];
+            if($errorCode == 1062){
+                $res = redirect()->back()->with([
+                    'message' => "Data sudah pernah diinput. Periksa Kembali Tahun/Bulan/Jenis data anda.",
+                    'message_type' => 'warning',
+                ])->withInput();
+                \Session::driver()->save();
+                $res->send();
+                exit;
+            } else {
+                $res = redirect()->back()->with([
+                    'message' => $e->getMessage(),
+                    'message_type' => 'danger',
+                ])->withInput();
+                \Session::driver()->save();
+                $res->send();
+                exit;
+            }
+        }
+
+        
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];

@@ -35,9 +35,7 @@ $(function() {
     $('#{{$name}}').select2({
         placeholder: {
             id: '-1',
-            text: '{{trans('
-            crudbooster.text_prefix_option ')}} {{$form['
-            label ']}}'
+            text: '{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}'
         },
         allowClear: true,
         ajax: {
