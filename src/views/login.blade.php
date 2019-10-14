@@ -46,8 +46,6 @@
       }
       .login-box, .register-box {
         margin: 2% auto;
-        background: url('/batik.png');
-        background-repeat: repeat !important;
       }
       .login-box-body {
         box-shadow: 0px 0px 50px rgba(0,0,0,0.8);
