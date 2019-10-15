@@ -1147,6 +1147,7 @@ class CBController extends Controller
             $this->arr['created_at'] = date('Y-m-d H:i:s');
         }
         
+        unset($this->arr['label_group']); // ignore label_group form
         $this->hook_before_add($this->arr);
         
 //         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
@@ -1307,6 +1308,7 @@ class CBController extends Controller
             $this->arr['updated_at'] = date('Y-m-d H:i:s');
         }
 
+        unset($this->arr['label_group']); // ignore label_group form
         $this->hook_before_edit($this->arr, $id);
 
         try { 
