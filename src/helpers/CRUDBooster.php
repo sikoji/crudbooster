@@ -11,6 +11,7 @@ use Schema;
 use Session;
 use Storage;
 use Validator;
+use JD\Cloudder\Facades\Cloudder;
 
 class CRUDBooster
 {
@@ -62,6 +63,17 @@ class CRUDBooster
             $filesize = $file->getClientSize() / 1024;
             $file_path = 'uploads/'.$userID.'/'.date('Y-m');
 
+            if (env('UPLOAD_TO', 'storage') == "cloudinary") {
+                
+                $image_name = $file->getRealPath();;
+                $options = array(
+                    "folder" => "masjid-rahmatan-lilalamin/",
+                );
+                Cloudder::upload($image_name,null, $options);
+                $result = Cloudder::getResult();
+                
+                return $result['url'];
+            }
             //Create Directory Monthly
             Storage::makeDirectory($file_path);
 
@@ -70,7 +82,7 @@ class CRUDBooster
             } else {
                 $filename = str_slug($filename, '_').'.'.$ext;
             }
-
+            
             if (Storage::putFileAs($file_path, $file, $filename)) {
                 self::resizeImage($file_path.'/'.$filename, $resize_width, $resize_height);
 
