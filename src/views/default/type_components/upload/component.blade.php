@@ -28,6 +28,7 @@
             ?>
             
         @else
+        <input type='hidden' name='{{ "_".$name }}' value='{{ $value }}'/>
         <a data-lightbox='roadtrip' href='{{ env('BASE_CLOUDINARY', 'https://res.cloudinary.com/sikoji')."c_scale,w_1024/".$value }}'><img style='max-width:150px' title="Image For {{$form['label']}}" src='{{ env('BASE_CLOUDINARY', 'https://res.cloudinary.com/sikoji')."c_scale,w_150/".$value }}'/></a>    
         @endif
         @if(!$readonly || !$disabled)
