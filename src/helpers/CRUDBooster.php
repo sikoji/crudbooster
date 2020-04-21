@@ -72,7 +72,7 @@ class CRUDBooster
                 Cloudder::upload($image_name,null, $options);
                 $result = Cloudder::getResult();
                 
-                return $result['url'];
+                return $result['public_id'];
             }
             //Create Directory Monthly
             Storage::makeDirectory($file_path);
