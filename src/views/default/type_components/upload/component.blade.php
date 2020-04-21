@@ -14,7 +14,7 @@
             $images_type = array('jpg', 'png', 'gif', 'jpeg', 'bmp', 'tiff');
             if(in_array(strtolower($ext), $images_type)):
             ?>
-            <p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
+            <p><a data-lightbox='roadtrip' href='{{ env('BASE_CLOUDINARY', 'https://res.cloudinary.com/sikoji').$value }}'><img style='max-width:150px' title="Image For {{$form['label']}}" src='{{ env('BASE_CLOUDINARY', 'https://res.cloudinary.com/sikoji')."c_scale,w_150/".$value }}'/></a></p>
             <?php else:?>
             <p><a href='{{$url}}'>{{trans("crudbooster.button_download_file")}}</a></p>
             <?php endif;
