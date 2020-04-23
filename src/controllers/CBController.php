@@ -1780,7 +1780,12 @@ class CBController extends Controller
         $this->cbLoader();
         $name = 'userfile';
         if ($file = CRUDBooster::uploadFile($name, true)) {
-            echo asset($file);
+            if (env('UPLOAD_TO', 'storage') == "cloudinary") {
+                echo env('BASE_CLOUDINARY', 'https://res.cloudinary.com/sikoji')."c_scale,w_".env('DEFAULT_WIDTH_ARTICLE', 1024)."/".$file;
+            } else {
+                echo asset($file);
+            }
+            
         }
     }
 
